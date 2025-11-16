@@ -1,0 +1,73 @@
+# Configuración General del Proyecto
+
+# Dataset
+data:
+  dataset_name: "food_ingredients_51"
+  num_classes: 51
+  classes: [
+    "apple", "banana", "beetroot", "bell_pepper", "cabbage",
+    "capsicum", "carrot", "cauliflower", "chilli_pepper", "corn",
+    "cucumber", "eggplant", "garlic", "ginger", "grapes",
+    "jalepeno", "kiwi", "lemon", "lettuce", "mango",
+    "onion", "orange", "paprika", "pear", "peas",
+    "pineapple", "pomegranate", "potato", "raddish", "soy_beans",
+    "spinach", "sweetcorn", "sweetpotato", "tomato", "turnip",
+    "watermelon", "broccoli", "green_beans", "mushroom", "okra",
+    "pumpkin", "red_chilli", "grapefruit", "lime", "peach",
+    "plum", "strawberry", "zucchini", "asparagus", "avocado", "celery"
+  ]
+  img_size: 224
+  batch_size: 32
+  num_workers: 4
+  train_split: 0.7
+  val_split: 0.15
+  test_split: 0.15
+  seed: 42
+
+# Model
+model:
+  architecture: "deit_tiny_patch16_224"
+  pretrained: true
+  num_classes: 51
+  dropout: 0.1
+  drop_path_rate: 0.0
+
+# Training
+training:
+  epochs: 50
+  learning_rate: 5e-5
+  weight_decay: 1e-4
+  optimizer: "adamw"
+  scheduler: "cosine"
+  warmup_epochs: 5
+  label_smoothing: 0.1
+  gradient_clip: 1.0
+  
+# Augmentation
+augmentation:
+  train:
+    horizontal_flip: 0.5
+    rotation: 15
+    color_jitter:
+      brightness: 0.2
+      contrast: 0.2
+      saturation: 0.2
+      hue: 0.1
+    random_resized_crop: true
+  val:
+    center_crop: true
+
+# MLflow
+mlflow:
+  experiment_name: "ingredients_classification"
+  tracking_uri: "databricks"  # Uses Databricks tracking
+  # artifact_location will be set automatically by Databricks
+  # Registry URI: databricks (for model registry)
+  
+# Paths
+paths:
+  data_dir: "./data"
+  output_dir: "./outputs"
+  models_dir: "./outputs/models"
+  figures_dir: "./outputs/figures"
+  results_dir: "./outputs/results"
