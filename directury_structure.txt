@@ -1,0 +1,133 @@
+.
+├── assets
+│   ├── diagrams
+│   ├── images
+│   └── presentation
+├── config
+├── data
+│   ├── processed
+│   ├── raw
+│   │   └── huggingface
+│   │       ├── Train
+│   │       │   ├── Amaranth
+│   │       │   ├── Apple
+│   │       │   ├── Banana
+│   │       │   ├── Beetroot
+│   │       │   ├── Bell pepper
+│   │       │   ├── Bitter Gourd
+│   │       │   ├── Blueberry
+│   │       │   ├── Bottle Gourd
+│   │       │   ├── Broccoli
+│   │       │   ├── Cabbage
+│   │       │   ├── Cantaloupe
+│   │       │   ├── Capsicum
+│   │       │   ├── Carrot
+│   │       │   ├── Cauliflower
+│   │       │   ├── Chilli pepper
+│   │       │   ├── Coconut
+│   │       │   ├── Corn
+│   │       │   ├── Cucumber
+│   │       │   ├── Dragon_fruit
+│   │       │   ├── Eggplant
+│   │       │   ├── Fig
+│   │       │   ├── Garlic
+│   │       │   ├── Ginger
+│   │       │   ├── Grapes
+│   │       │   ├── Jalepeno
+│   │       │   ├── Kiwi
+│   │       │   ├── Lemon
+│   │       │   ├── Mango
+│   │       │   ├── Okra
+│   │       │   ├── Onion
+│   │       │   ├── Orange
+│   │       │   ├── Paprika
+│   │       │   ├── Pear
+│   │       │   ├── Peas
+│   │       │   ├── Pineapple
+│   │       │   ├── Pomegranate
+│   │       │   ├── Potato
+│   │       │   ├── Pumpkin
+│   │       │   ├── Raddish
+│   │       │   ├── Raspberry
+│   │       │   ├── Ridge Gourd
+│   │       │   ├── Soy beans
+│   │       │   ├── Spinach
+│   │       │   ├── Spiny Gourd
+│   │       │   ├── Sponge Gourd
+│   │       │   ├── Strawberry
+│   │       │   ├── Sweetcorn
+│   │       │   ├── Sweetpotato
+│   │       │   ├── Tomato
+│   │       │   ├── Turnip
+│   │       │   └── Watermelon
+│   │       └── val
+│   │           ├── Amaranth
+│   │           ├── Apple
+│   │           ├── Banana
+│   │           ├── Beetroot
+│   │           ├── Bell pepper
+│   │           ├── Bitter Gourd
+│   │           ├── Blueberry
+│   │           ├── Bottle Gourd
+│   │           ├── Broccoli
+│   │           ├── Cabbage
+│   │           ├── Cantaloupe
+│   │           ├── Capsicum
+│   │           ├── Carrot
+│   │           ├── Cauliflower
+│   │           ├── Chilli pepper
+│   │           ├── Coconut
+│   │           ├── Corn
+│   │           ├── Cucumber
+│   │           ├── Dragon Fruit
+│   │           ├── Eggplant
+│   │           ├── Fig
+│   │           ├── Garlic
+│   │           ├── Ginger
+│   │           ├── Grapes
+│   │           ├── Jalepeno
+│   │           ├── Kiwi
+│   │           ├── Lemon
+│   │           ├── Mango
+│   │           ├── Okra
+│   │           ├── Onion
+│   │           ├── Orange
+│   │           ├── Paprika
+│   │           ├── Pear
+│   │           ├── Peas
+│   │           ├── Pineapple
+│   │           ├── Pomegranate
+│   │           ├── Potato
+│   │           ├── Pumpkin
+│   │           ├── Raddish
+│   │           ├── Raspberry
+│   │           ├── Ridge Gourd
+│   │           ├── Soy beans
+│   │           ├── Spinach
+│   │           ├── Spiny Groud
+│   │           ├── Sponge Gourd
+│   │           ├── Strawberry
+│   │           ├── Sweetcorn
+│   │           ├── Sweetpotato
+│   │           ├── Tomato
+│   │           ├── Turnip
+│   │           └── Watermelon
+│   └── splits
+├── docs
+├── experiments
+│   └── configs
+├── mlruns
+├── notebooks
+├── outputs
+│   ├── figures
+│   ├── models
+│   └── results
+├── scripts
+└── src
+    ├── data
+    ├── evaluation
+    ├── models
+    ├── training
+    └── utils
+
+131 directories

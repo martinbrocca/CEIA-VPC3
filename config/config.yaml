@@ -2,20 +2,60 @@
 
 # Dataset
 data:
-  dataset_name: "food_ingredients_51"
+  dataset_name: food_ingredients_51
   num_classes: 51
-  classes: [
-    "apple", "banana", "beetroot", "bell_pepper", "cabbage",
-    "capsicum", "carrot", "cauliflower", "chilli_pepper", "corn",
-    "cucumber", "eggplant", "garlic", "ginger", "grapes",
-    "jalepeno", "kiwi", "lemon", "lettuce", "mango",
-    "onion", "orange", "paprika", "pear", "peas",
-    "pineapple", "pomegranate", "potato", "raddish", "soy_beans",
-    "spinach", "sweetcorn", "sweetpotato", "tomato", "turnip",
-    "watermelon", "broccoli", "green_beans", "mushroom", "okra",
-    "pumpkin", "red_chilli", "grapefruit", "lime", "peach",
-    "plum", "strawberry", "zucchini", "asparagus", "avocado", "celery"
-  ]
+  classes:
+    - apple
+    - banana
+    - beetroot
+    - bell_pepper
+    - cabbage
+    - capsicum
+    - carrot
+    - cauliflower
+    - chilli_pepper
+    - corn
+    - cucumber
+    - eggplant
+    - garlic
+    - ginger
+    - grapes
+    - jalepeno
+    - kiwi
+    - lemon
+    - lettuce
+    - mango
+    - onion
+    - orange
+    - paprika
+    - pear
+    - peas
+    - pineapple
+    - pomegranate
+    - potato
+    - raddish
+    - soy_beans
+    - spinach
+    - sweetcorn
+    - sweetpotato
+    - tomato
+    - turnip
+    - watermelon
+    - broccoli
+    - green_beans
+    - mushroom
+    - okra
+    - pumpkin
+    - red_chilli
+    - grapefruit
+    - lime
+    - peach
+    - plum
+    - strawberry
+    - zucchini
+    - asparagus
+    - avocado
+    - celery
   img_size: 224
   batch_size: 32
   num_workers: 4
@@ -26,7 +66,7 @@ data:
 
 # Model
 model:
-  architecture: "deit_tiny_patch16_224"
+  architecture: deit_tiny_patch16_224
   pretrained: true
   num_classes: 51
   dropout: 0.1
@@ -35,10 +75,10 @@ model:
 # Training
 training:
   epochs: 50
-  learning_rate: 5e-5
-  weight_decay: 1e-4
-  optimizer: "adamw"
-  scheduler: "cosine"
+  learning_rate: 0.00005
+  weight_decay: 0.0001
+  optimizer: adamw
+  scheduler: cosine
   warmup_epochs: 5
   label_smoothing: 0.1
   gradient_clip: 1.0
@@ -59,15 +99,13 @@ augmentation:
 
 # MLflow
 mlflow:
-  experiment_name: "ingredients_classification"
-  tracking_uri: "databricks"  # Uses Databricks tracking
-  # artifact_location will be set automatically by Databricks
-  # Registry URI: databricks (for model registry)
+  experiment_name: /Shared/ingredients_classification
+  tracking_uri: databricks
   
 # Paths
 paths:
-  data_dir: "./data"
-  output_dir: "./outputs"
-  models_dir: "./outputs/models"
-  figures_dir: "./outputs/figures"
-  results_dir: "./outputs/results"
+  data_dir: ./data
+  output_dir: ./outputs
+  models_dir: ./outputs/models
+  figures_dir: ./outputs/figures
+  results_dir: ./outputs/results
