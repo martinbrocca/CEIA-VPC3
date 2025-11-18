@@ -70,9 +70,18 @@ def evaluate_model(
     # Balanced accuracy (important for imbalanced datasets)
     metrics['balanced_accuracy'] = balanced_accuracy_score(all_labels, all_preds)
     
-    # Top-k accuracy
-    metrics['top3_accuracy'] = top_k_accuracy_score(all_labels, all_probs, k=3)
-    metrics['top5_accuracy'] = top_k_accuracy_score(all_labels, all_probs, k=5)
+    # Top-k accuracy - FIX: provide labels parameter for all classes
+    num_classes = all_probs.shape[1]
+    metrics['top3_accuracy'] = top_k_accuracy_score(
+        all_labels, all_probs, 
+        k=min(3, num_classes), 
+        labels=np.arange(num_classes)
+    )
+    metrics['top5_accuracy'] = top_k_accuracy_score(
+        all_labels, all_probs, 
+        k=min(5, num_classes), 
+        labels=np.arange(num_classes)
+    )
     
     # Precision, Recall, F1 (macro and weighted)
     precision_macro, recall_macro, f1_macro, _ = precision_recall_fscore_support(
@@ -104,12 +113,16 @@ def evaluate_model(
     # Confusion matrix
     metrics['confusion_matrix'] = confusion_matrix(all_labels, all_preds)
     
-    # Classification report
+    # Classification report - need to specify labels for all classes
     if class_names is None:
-        class_names = [str(i) for i in range(len(np.unique(all_labels)))]
+        class_names = [str(i) for i in range(num_classes)]
+    
+    # Get all possible labels (0 to num_classes-1)
+    all_possible_labels = np.arange(num_classes)
     
     metrics['classification_report'] = classification_report(
         all_labels, all_preds, 
+        labels=all_possible_labels,  # Specify all possible labels
         target_names=class_names,
         output_dict=True,
         zero_division=0
@@ -262,52 +275,3 @@ def get_misclassified_samples(
         })
     
     return pd.DataFrame(results)
-
-
-if __name__ == "__main__":
-    """Test metrics computation"""
-    
-    # Create dummy predictions
-    num_samples = 1000
-    num_classes = 51
-    
-    np.random.seed(42)
-    labels = np.random.randint(0, num_classes, num_samples)
-    predictions = labels.copy()
-    
-    # Add some errors
-    error_indices = np.random.choice(num_samples, size=100, replace=False)
-    predictions[error_indices] = np.random.randint(0, num_classes, 100)
-    
-    # Create dummy probabilities
-    probabilities = np.random.rand(num_samples, num_classes)
-    probabilities = probabilities / probabilities.sum(axis=1, keepdims=True)
-    
-    # Create dummy class names
-    class_names = [f"class_{i}" for i in range(num_classes)]
-    
-    # Compute metrics (simulated)
-    print("Testing metrics computation...")
-    print("=" * 60)
-    
-    accuracy = accuracy_score(labels, predictions)
-    balanced_acc = balanced_accuracy_score(labels, predictions)
-    top3_acc = top_k_accuracy_score(labels, probabilities, k=3)
-    
-    print(f"Accuracy: {accuracy:.4f}")
-    print(f"Balanced Accuracy: {balanced_acc:.4f}")
-    print(f"Top-3 Accuracy: {top3_acc:.4f}")
-    
-    # Confidence metrics
-    conf_metrics = compute_confidence_metrics(probabilities, predictions)
-    print(f"\nConfidence Metrics:")
-    for key, value in conf_metrics.items():
-        print(f"  {key}: {value:.4f}")
-    
-    # Misclassified samples
-    print(f"\nTop 5 Misclassified Samples:")
-    misclassified = get_misclassified_samples(
-        predictions, labels, probabilities, class_names, top_k=5
-    )
-    if len(misclassified) > 0:
-        print(misclassified.to_string(index=False))

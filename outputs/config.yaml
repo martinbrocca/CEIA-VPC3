@@ -11,7 +11,7 @@ augmentation:
   val:
     center_crop: true
 data:
-  batch_size: 8
+  batch_size: 128
   classes:
   - apple
   - banana
@@ -88,7 +88,7 @@ paths:
   output_dir: ./outputs
   results_dir: ./outputs/results
 training:
-  epochs: 2
+  epochs: 30
   gradient_clip: 1.0
   label_smoothing: 0.1
   learning_rate: 5.0e-05

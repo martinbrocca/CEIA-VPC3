@@ -25,6 +25,13 @@ from src.utils.mlflow_utils import (
     log_dataset_info,
     save_config_as_artifact
 )
+from src.evaluation.metrics import evaluate_model, get_per_class_metrics_df, get_misclassified_samples
+from src.evaluation.visualizations import (
+    plot_confusion_matrix,
+    plot_training_history,
+    plot_per_class_metrics,
+    plot_top_errors
+)
 from config.mlflow_config import setup_mlflow
 import mlflow
 
@@ -214,12 +221,93 @@ def main():
             logger.info(f"\nStarting training for {config['training']['epochs']} epochs...")
             trainer.fit(
                 epochs=config['training']['epochs'],
-                run_name=None,  # Already in MLflow context
                 log_interval=1
             )
             
+            # Generate evaluation artifacts
+            logger.info("\nGenerating evaluation artifacts...")
+            
+            # Get MLflow run ID for unique filenames
+            run_id = run.info.run_id
+            
+            # Create run-specific output directory
+            run_output_dir = Path(f'outputs/figures/{run_id}')
+            run_output_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Evaluate on validation set
+            val_metrics = evaluate_model(
+                model=model,
+                dataloader=val_loader,
+                device=device,
+                class_names=class_names
+            )
+            
+            # Save confusion matrix (normalized)
+            cm_path = run_output_dir / 'confusion_matrix_normalized.png'
+            plot_confusion_matrix(
+                val_metrics['confusion_matrix'],
+                class_names,
+                save_path=str(cm_path),
+                normalize=True
+            )
+            
+            # Save confusion matrix (raw counts)
+            cm_raw_path = run_output_dir / 'confusion_matrix_raw.png'
+            plot_confusion_matrix(
+                val_metrics['confusion_matrix'],
+                class_names,
+                save_path=str(cm_raw_path),
+                normalize=False
+            )
+            
+            # Save training history
+            history_path = run_output_dir / 'training_history.png'
+            plot_training_history(
+                trainer.history,
+                save_path=str(history_path)
+            )
+            
+            # Per-class metrics
+            metrics_df = get_per_class_metrics_df(val_metrics, class_names)
+            per_class_path = run_output_dir / 'per_class_metrics.png'
+            plot_per_class_metrics(
+                metrics_df,
+                save_path=str(per_class_path),
+                top_k=20
+            )
+            
+            # Top errors (misclassifications)
+            misclassified = get_misclassified_samples(
+                val_metrics['predictions'],
+                val_metrics['labels'],
+                val_metrics['probabilities'],
+                class_names,
+                top_k=15
+            )
+            if len(misclassified) > 0:
+                top_errors_path = run_output_dir / 'top_errors.png'
+                plot_top_errors(misclassified, save_path=str(top_errors_path))
+            
+            # Save metrics summary
+            import json
+            metrics_summary = {
+                'accuracy': float(val_metrics['accuracy']),
+                'balanced_accuracy': float(val_metrics['balanced_accuracy']),
+                'top3_accuracy': float(val_metrics['top3_accuracy']),
+                'top5_accuracy': float(val_metrics['top5_accuracy']),
+                'f1_macro': float(val_metrics['f1_macro']),
+                'f1_weighted': float(val_metrics['f1_weighted'])
+            }
+            with open(run_output_dir / 'metrics_summary.json', 'w') as f:
+                json.dump(metrics_summary, f, indent=2)
+            
+            # Log all artifacts to MLflow
+            mlflow.log_artifacts(str(run_output_dir))
+            
+            logger.info(f"Evaluation artifacts saved to {run_output_dir}/")
             logger.info("\nTraining completed!")
             logger.info(f"Best validation accuracy: {trainer.best_val_acc:.2f}%")
+            logger.info(f"Final validation accuracy: {val_metrics['accuracy']*100:.2f}%")
     
     else:
         # Train without MLflow
@@ -239,7 +327,6 @@ def main():
         
         trainer.fit(
             epochs=config['training']['epochs'],
-            run_name=None,
             log_interval=1
         )
         
