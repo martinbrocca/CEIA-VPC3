@@ -11,7 +11,7 @@ augmentation:
   val:
     center_crop: true
 data:
-  batch_size: 128
+  batch_size: 256
   classes:
   - apple
   - banana
@@ -76,7 +76,7 @@ mlflow:
   experiment_name: /Shared/ingredients_classification
   tracking_uri: databricks
 model:
-  architecture: deit_tiny_patch16_224
+  architecture: deit_tiny
   drop_path_rate: 0.0
   dropout: 0.1
   num_classes: 51
@@ -88,10 +88,10 @@ paths:
   output_dir: ./outputs
   results_dir: ./outputs/results
 training:
-  epochs: 30
+  epochs: 50
   gradient_clip: 1.0
   label_smoothing: 0.1
-  learning_rate: 5.0e-05
+  learning_rate: 0.0001
   optimizer: adamw
   scheduler: cosine
   warmup_epochs: 5

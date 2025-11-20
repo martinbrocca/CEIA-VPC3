@@ -140,29 +140,20 @@ def get_per_class_metrics_df(
     metrics: Dict,
     class_names: List[str]
 ) -> pd.DataFrame:
-    """
-    Get per-class metrics as DataFrame
-    
-    Args:
-        metrics: Metrics dict from evaluate_model
-        class_names: List of class names
-        
-    Returns:
-        DataFrame with per-class metrics
-    """
     per_class = metrics['per_class']
     
+    # Use only the classes that have metrics
+    num_classes_with_metrics = len(per_class['precision'])
+    
     df = pd.DataFrame({
-        'class': class_names,
+        'class': class_names[:num_classes_with_metrics],
         'precision': per_class['precision'],
         'recall': per_class['recall'],
         'f1_score': per_class['f1'],
         'support': per_class['support']
     })
     
-    # Sort by F1 score
     df = df.sort_values('f1_score', ascending=False).reset_index(drop=True)
-    
     return df
 
 
